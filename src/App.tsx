@@ -104,6 +104,7 @@ function App() {
                 return (
                     <Todolist title={mapTodolist.title}
                               tasks={tasksForTodolist}
+                              tasks={tasksForTodolist}
                               removeTask={removeTask}
                               changeFilter={changeFilter}
                               addTask={addTask}
