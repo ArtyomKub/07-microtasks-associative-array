@@ -63,15 +63,11 @@ function App() {
 
     function removeTask(todolistID: string, id: string) {
         setTasks({...tasks, [todolistID]: tasks[todolistID].filter(t => t.id != id)})
-
-        // let filteredTasks = tasks.filter(t => t.id != id);
-        // setTasks(filteredTasks);
     }
 
-    function addTask(title: string) {
-        // let task = {id: v1(), title: title, isDone: false};
-        // let newTasks = [task, ...tasks];
-        // setTasks(newTasks);
+    function addTask(todolistID: string, title: string) {
+        let newTask = {id: v1(), title: title, isDone: false};
+        setTasks({...tasks, [todolistID]: [...tasks[todolistID], newTask]})
     }
 
     function changeStatus(taskId: string, isDone: boolean) {
@@ -90,20 +86,16 @@ function App() {
         setTodolists(todolists.map(filtered => filtered.id === todolistID ? {...filtered, filter: value} : filtered))
     }
 
-
     return (
         <div className="App">
-
             {todolists.map((mapTodolist) => {
                 let tasksForTodolist = tasks[mapTodolist.id];
-
                 if (mapTodolist.filter === "active") {
-                    tasksForTodolist = tasks[mapTodolist.id].filter(t => t.isDone === false);
+                    tasksForTodolist = tasks[mapTodolist.id].filter(t => !t.isDone);
                 }
                 if (mapTodolist.filter === "completed") {
-                    tasksForTodolist = tasks[mapTodolist.id].filter(t => t.isDone === true);
+                    tasksForTodolist = tasks[mapTodolist.id].filter(t => t.isDone);
                 }
-
                 return (
                     <Todolist
                         key={mapTodolist.id}
