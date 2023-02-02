@@ -13,13 +13,13 @@ export type todolistsType = {
 }
 
 export type todolistID1PropsType = {
-    id: ()=> void
+    id: () => void
     title: string
     isDone: boolean
 }
 
 export type todolistID2PropsType = {
-    id: ()=> void
+    id: () => void
     title: string
     isDone: boolean
 }
@@ -34,7 +34,6 @@ function App() {
     //     {id: v1(), title: "Rest API", isDone: false},
     //     {id: v1(), title: "GraphQL", isDone: false},
     // ]);
-
     // let [filter, setFilter] = useState<FilterValuesType>("all");
 
     let todolistID1 = v1();
@@ -62,7 +61,9 @@ function App() {
         ]
     });
 
-    function removeTask(id: string) {
+    function removeTask(todolistID: string, id: string) {
+        setTasks({[todolistID]: tasks[todolistID].filter(t => t.id != id)})
+
         // let filteredTasks = tasks.filter(t => t.id != id);
         // setTasks(filteredTasks);
     }
@@ -84,37 +85,39 @@ function App() {
 
     // let tasksForTodolist = tasks;
 
-    if (filter === "active") {
-        tasksForTodolist = tasks.filter(t => t.isDone === false);
-    }
-    if (filter === "completed") {
-        tasksForTodolist = tasks.filter(t => t.isDone === true);
-    }
 
-    function changeFilter(value: FilterValuesType) {
-        setFilter(value);
+    function changeFilter(todolistID: string, value: FilterValuesType) {
+        setTodolists(todolists.map(filtered => filtered.id === todolistID ? {...filtered, filter: value} : filtered))
     }
 
 
     return (
         <div className="App">
 
-            {todolists.map((mapTodolist)=>{
+            {todolists.map((mapTodolist) => {
                 let tasksForTodolist = tasks[mapTodolist.id];
+
+                if (mapTodolist.filter === "active") {
+                    tasksForTodolist = tasks[mapTodolist.id].filter(t => t.isDone === false);
+                }
+                if (mapTodolist.filter === "completed") {
+                    tasksForTodolist = tasks[mapTodolist.id].filter(t => t.isDone === true);
+                }
+
                 return (
-                    <Todolist title={mapTodolist.title}
-                              tasks={tasksForTodolist}
-                              tasks={tasksForTodolist}
-                              removeTask={removeTask}
-                              changeFilter={changeFilter}
-                              addTask={addTask}
-                              changeTaskStatus={changeStatus}
-                              filter={mapTodolist.filter}
+                    <Todolist
+                        key={mapTodolist.id}
+                        todolistID={mapTodolist.id}
+                        title={mapTodolist.title}
+                        tasks={tasksForTodolist}
+                        removeTask={removeTask}
+                        changeFilter={changeFilter}
+                        addTask={addTask}
+                        changeTaskStatus={changeStatus}
+                        filter={mapTodolist.filter}
                     />
                 )
             })}
-
-
 
 
         </div>
